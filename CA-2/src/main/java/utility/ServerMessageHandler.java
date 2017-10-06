@@ -14,7 +14,7 @@ public class ServerMessageHandler {
         this.client = client;
     }
 
-    public void handleServerMessage(String msg) {
+    public synchronized void handleServerMessage(String msg) {
         String[] splitMessage = msg.split(":");
         String command = splitMessage[0];
         switch (command) {
@@ -36,17 +36,7 @@ public class ServerMessageHandler {
     public void displayConnectedClients(String[] msgFromServer) {
         String targets = msgFromServer[1];
         String[] splitTargets = targets.split(",");
-//        String formattedTargets = "";
-//        
-//        int i = 0;
-//        for (String target : splitTargets) {
-//            formattedTargets += target;
-//            if (i < splitTargets.length-1 && splitTargets.length > 1) {
-//                    formattedTargets += ", ";
-//            }
-//            i++;
-//        }
-//        
+
         client.updateClientList(splitTargets);
     }
 

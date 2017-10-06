@@ -60,6 +60,7 @@ public class Client implements Runnable {
     }
 
     public void send(String msgToServer) {
+        
         toServer.println(msgToServer);
     }
 

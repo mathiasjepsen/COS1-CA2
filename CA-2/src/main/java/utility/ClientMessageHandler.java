@@ -15,7 +15,7 @@ public class ClientMessageHandler {
         this.ch = ch;
     }
 
-    public void handleMessage(String msgFromClient) {
+    public synchronized void handleMessage(String msgFromClient) {
         String[] splitMsg = msgFromClient.split(":");
         switch (splitMsg[0]) {
             case "LOGOUT":

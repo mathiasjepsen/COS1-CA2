@@ -4,8 +4,11 @@ import client.Client;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -182,21 +185,26 @@ public class GUI extends javax.swing.JFrame {
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         // TODO add your handling code here:
-        client = new Client(this);
-        
-        ExecutorService es = Executors.newCachedThreadPool();
-        
-        try {
-            client.connect(hostField.getText(), Integer.parseInt(portField.getText()));
-            textArea.append("Connected to host " + hostField.getText() + " on port " + Integer.parseInt(portField.getText()) + "\n");
-            es.execute(client);
-            es.shutdown();
-        } catch (IOException e) {
+        SwingUtilities.invokeLater(() -> {
+            textArea.setText("");
 
-        }
-        String toServer = "LOGIN:" + usernameField.getText();
-        client.send(toServer);
-        
+            client = new Client(this);
+
+            ExecutorService es = Executors.newCachedThreadPool();
+
+            try {
+                client.connect(hostField.getText(), Integer.parseInt(portField.getText()));
+                textArea.append("Connected to host " + hostField.getText() + " on port " + Integer.parseInt(portField.getText()) + "\n");
+                es.execute(client);
+                es.shutdown();
+            } catch (IOException e) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
+            }
+            
+            String toServer = "LOGIN:" + usernameField.getText();
+            client.send(toServer);
+        });
+
     }//GEN-LAST:event_connectButtonActionPerformed
 
     private void inputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFieldActionPerformed
@@ -206,15 +214,20 @@ public class GUI extends javax.swing.JFrame {
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         // TODO add your handling code here:
-        String toServer = "LOGOUT:";
-        client.send(toServer);
+        SwingUtilities.invokeLater(() -> {
+            String toServer = "LOGOUT:";
+            client.send(toServer);
+        });
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         // TODO add your handling code here:
-        String toServer = "MSG:" + toField.getText() + ":" + inputField.getText();
-        client.send(toServer);
-        inputField.setText("");
+        SwingUtilities.invokeLater(() -> {
+            String targets = toField.getText().replace(" ", "");
+            String toServer = "MSG:" + targets + ":" + inputField.getText();
+            client.send(toServer);
+            inputField.setText("");
+        });
     }//GEN-LAST:event_sendButtonActionPerformed
 
     /**
@@ -263,27 +276,34 @@ public class GUI extends javax.swing.JFrame {
     }
 
     public void updateClientList(String[] clients) {
-        model.clear();
+        SwingUtilities.invokeLater(() -> {
+            model.clear();
 
-        for (String c : clients) {
-            model.addElement(c);
-        }
-        clientList.setModel(model);       
+            for (String c : clients) {
+                model.addElement(c);
+            }
+            
+            clientList.setModel(model);
+        });
     }
-    
+
     public void displayMessage(String[] msgFromServer) {
-        String sender = msgFromServer[1];
-        String message = msgFromServer[2];
-        getTextArea().append(sender + ": " + message + "\n");
+        SwingUtilities.invokeLater(() -> {
+            String sender = msgFromServer[1];
+            String message = msgFromServer[2];
+            getTextArea().append(sender + ": " + message + "\n");
+        });
     }
-    
+
     public void resetFields() {
-        usernameField.setText("");
-        hostField.setText("");
-        portField.setText("");
-        model.clear();
-        inputField.setText("");
-        toField.setText("");
+        SwingUtilities.invokeLater(() -> {
+            usernameField.setText("");
+            hostField.setText("");
+            portField.setText("");
+            model.clear();
+            inputField.setText("");
+            toField.setText("");
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
