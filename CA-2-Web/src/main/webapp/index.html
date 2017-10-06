@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+            /* Remove the navbar's default margin-bottom and rounded borders */ 
+            .navbar {
+                margin-bottom: 0;
+                border-radius: 0;
+            }
+
+            /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+            .row.content {height: 450px}
+
+            /* Set gray background color and 100% height */
+            .sidenav {
+                padding-top: 20px;
+                background-color: #f1f1f1;
+                height: 100%;
+            }
+
+            /* Set black background color, white text and some padding */
+            footer {
+                background-color: #555;
+                color: white;
+                padding: 15px;
+            }
+
+            /* On small screens, set height to 'auto' for sidenav and grid */
+            @media screen and (max-width: 767px) {
+                .sidenav {
+                    height: auto;
+                    padding: 15px;
+                }
+                .row.content {height:auto;} 
+            }
+        </style>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href="#">COS1</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="https://mathiasjepsen.dk/files/CA-2-ChatClient.jar">Download client</a></li>
+                        <li><a href="https://github.com/mathiasjepsen/COS1-CA2">Git Repository</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid text-center">    
+            <div class="row content">
+                <div class="col-sm-8 col-sm-offset-2 text-left">
+                    <h1>Group members</h1>
+                    <h3>COS1</h3>
+                    <h4>Thomas Thimothee, Mathias Jepsen, Dimitris Tekeoglou, Lovro Biljeskovic</h4>
+                    <br>
+                    <h1>System Design</h1>
+                    <p>We followed the suggested two-day mini sprint agenda, and first started with a Maven Web Application, that
+                    we later realized wouldn't work because we needed a GUI made in Swing. For that purpose we copied our project to
+                    a new Maven Java Application and also started a new GitHub repository, hence the lack of commits and contributions 
+                    to the repository. Each day we met and worked together discussing and coding along on the same computer, because we
+                    could not really see a feasible solution to splitting up the different tasks that needed to be done.</p>
+                    <br>
+                    <p>The system is composed of a Server class that listens on port 8081 for incoming connections. When it receives one,
+                    it instantiates a new instance of the class ClientHandler, that has a reference to the socket of the newly connected
+                    client and the server itself. Once a user telnets in or launches the GUI, an instance of the Client class is created,
+                    which listens for messages from the server. For it to update the GUI, we have used a compositional relationship between
+                    the GUI class and the Client class. Handling of the messages is done by two utility classes; messages from the client 
+                    is handled by the ClientMessageHandler, and messages from the server is handled by the ServerMessageHandler.</p>
+                    <br>
+                    <h1>Using our GUI</h1>
+                    <p>Double click on the JAR file to open a GUI window.
+                        The first step is then to file out the 3 top fields with your username, the IP and Port to connect to server, when it is done click "Connect".
+                        On the right side of the window you can see the list of usernames of connected users. This list gets updated every time any user logs in or logs out.
+                        The bottom part of the window is used when sending a message. In the bottom left field we set the recipient list, using the usernames. We can add one recipient "UserA", several recipients "UserA, UserB" or all users using the "*" sign.
+                        The field next to recipient is the text message field, click on "Send" when recipients and message fields are complete.
+                        To logout simply click the "Logout" button on the right part of the window.</p>
+                    <br>
+                    <h1>Testing</h1>
+                    <p>We used DAT group 13 server, hosted in jdbh.dk port:8081</p>
+                    <br>
+                    <h4>STEP 1/ Client login</h4>
+                    <p>We login with the first Client "Thomas". On our client side, we decided to gather the Connect and LOGIN action as one. When we click "Connect" both these actions are performed.</p>
+                    <img src="images/step1.png" alt="Step 1" style="width:100%;height:100%">
+                    <p>As we can see, this operation succeeded, "Thomas" is added to the connected users list on the right window (where we display the CLIENTLIST: part of the protocole).</p>
+                    <hr>
+                    <h4>STEP 2/ Second user</h4>
+                    <p>We repeat the first operation with a second user "Mathias". </p>
+                    <img src="images/step2.png" alt="Step 2" style="width:100%;height:100%">
+                    <p>Now both users are connected and appear in the connected users list.</p>
+                    <hr>
+                    <h4>STEP 3/User A sends "Hello" to user B</h4>
+                    <p>On Thomas' GUI we add "Mathias" in the "To" field and "Hello" in the text field and press "Send".</p>
+                    <img src="images/step3.png" alt="Step 3" style="width:100%;height:100%">
+                    <img src="images/step3.1.png" alt="Step 3.1" style="width:100%;height:100%">
+                    <p>Mathias received correctly the message with the format "Sender : Message". On Mathias' GUI we can see that the message was correctly displayed as "Thomas : Hello"
+                    <hr>
+                    <h4>STEP 4/User A sends "Hello you two" to users A and B</h4>
+                    <p>On Thomas' GUI we repeat the send message operation, this time we add "Mathias, Thomas" to the recipients.</p>
+                    <img src="images/step4.png" alt="Step 4" style="width:100%;height:100%">
+                    <img src="images/step4.png" alt="Step 4.1" style="width:100%;height:100%">
+                    <p>We can see that both users received the message with the correct "Sender : Message" format.</p>
+                    <hr>
+                    <h4>STEP 5/ User B sends "Hello all" to all (using * command)</h4>
+                    <p>This time Mathias sends the message "Hello all" to all connected users. We thus use the command "*" in the recipients field.</p>
+                    <img src="images/step5.png" alt="Step 5" style="width:100%;height:100%">
+                    <img src="images/step5.1.png" alt="Step 5.1" style="width:100%;height:100%">
+                    <p>We can see that both "Thomas" and "Mathias" (the only two connected users) receive the message correctly.</p>
+                    <hr>
+                    <h4>STEP 6/ User B logs out.</h4>
+                    <p>Mathias clicks the button "Logout", this triggers the "LOGOUT:" part of the protocole.</p>
+                    <img src="images/step6.png" alt="Step " style="width:100%;height:100%">
+                    <p>We can see that on "Thomas" window, the client list is now updated, and only "Thomas" appears in the list of connected Clients</p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+        <footer class="container-fluid text-center">
+            <p>COS1-CA2</p>
+        </footer>
+
+    </body>
+</html>
+
