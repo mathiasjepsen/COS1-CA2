@@ -271,6 +271,12 @@ public class GUI extends javax.swing.JFrame {
         clientList.setModel(model);       
     }
     
+    public void displayMessage(String[] msgFromServer) {
+        String sender = msgFromServer[1];
+        String message = msgFromServer[2];
+        getTextArea().append(sender + ": " + message + "\n");
+    }
+    
     public void resetFields() {
         usernameField.setText("");
         hostField.setText("");

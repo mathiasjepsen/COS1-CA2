@@ -15,7 +15,7 @@ import utility.ServerMessageHandler;
  * @author mathiasjepsen
  */
 public class Client implements Runnable {
-    
+
     private final ServerMessageHandler smh = new ServerMessageHandler(this);
     private final GUI GUI;
     private Socket clientSocket;
@@ -26,7 +26,7 @@ public class Client implements Runnable {
     public Client(GUI GUI) {
         this.GUI = GUI;
     }
-    
+
     @Override
     public void run() {
         while (isOpen) {
@@ -74,5 +74,12 @@ public class Client implements Runnable {
     public void setIsOpen(boolean isOpen) {
         this.isOpen = isOpen;
     }
-    
+
+    public void updateClientList(String[] recipients) {
+        GUI.updateClientList(recipients);
+    }
+
+    public void displayMessage(String[] msgFromServer) {
+        GUI.displayMessage(msgFromServer);
+    }
 }
