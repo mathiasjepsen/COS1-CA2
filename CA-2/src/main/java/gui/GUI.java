@@ -200,7 +200,7 @@ public class GUI extends javax.swing.JFrame {
             } catch (IOException e) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, e);
             }
-            
+
             String toServer = "LOGIN:" + usernameField.getText();
             client.send(toServer);
         });
@@ -223,10 +223,17 @@ public class GUI extends javax.swing.JFrame {
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         // TODO add your handling code here:
         SwingUtilities.invokeLater(() -> {
-            String targets = toField.getText().replace(" ", "");
-            String toServer = "MSG:" + targets + ":" + inputField.getText();
-            client.send(toServer);
-            inputField.setText("");
+            if (inputField.getText().length() > 0) {
+                String targets = toField.getText().replace(" ", "");
+                
+                if (toField.getText().equals("")) { 
+                    targets = "*";
+                }
+                
+                String toServer = "MSG:" + targets + ":" + inputField.getText();
+                client.send(toServer);
+                inputField.setText("");
+            }
         });
     }//GEN-LAST:event_sendButtonActionPerformed
 
@@ -282,7 +289,7 @@ public class GUI extends javax.swing.JFrame {
             for (String c : clients) {
                 model.addElement(c);
             }
-            
+
             clientList.setModel(model);
         });
     }

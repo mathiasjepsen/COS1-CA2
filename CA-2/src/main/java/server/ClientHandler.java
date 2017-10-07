@@ -17,12 +17,12 @@ import utility.ClientMessageHandler;
 public class ClientHandler implements Runnable {
 
     private final ClientMessageHandler cmh = new ClientMessageHandler(this);
-    BufferedReader fromClient;
-    PrintWriter toClient;
-    Socket socket;
-    Server server;
-    Map<String, ClientHandler> connectedClients;
-    String name;
+    private final BufferedReader fromClient;
+    private final PrintWriter toClient;
+    private final Socket socket;
+    private final Server server;
+    private final Map<String, ClientHandler> connectedClients;
+    private String name;
     private boolean loggedIn = false;
     private boolean connected = true;
 
